@@ -12,7 +12,7 @@ phpMyAdmin：[http://localhost:8080](http://localhost:8080)
   
 1.リポジトリのclone
 ```
-git clone https://github.com/projectd-team14/bicycle_system.git
+git clone https://github.com/projectd-team14/bicycle-system-backend.git
 ```
 2.ディレクトリに移動
 ```
