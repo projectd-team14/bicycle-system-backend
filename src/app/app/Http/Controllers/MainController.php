@@ -123,7 +123,7 @@ class MainController extends Controller
             array_push($spotsId, $spots[$i]['spots_id']);
         }
 
-        $cameraAll = Camera::where('spots_id', $spotsId)->get(['cameras_id', 'cameras_name', 'cameras_url']);
+        $cameraAll = Camera::where('spots_id', $spotsId)->get(['cameras_id', 'spots_id', 'cameras_name', 'cameras_url']);
         $bicycleAll = Bicycle::where('spots_id', $spotsId)->whereIn('bicycles_status', ['None', '違反'])->get();
 
         for ($j = 0; $j < count($spots); $j++){
