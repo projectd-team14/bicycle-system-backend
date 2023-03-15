@@ -35,8 +35,8 @@ Route::post('/logout', [LoginApiController::class, 'logout']);
 Route::middleware('auth:sanctum')->group(function(){
     // ダッシュボード、基本情報
     Route::get('/congestions_spot/{id}', [SpotDashboardController::class, 'CongestionsSpot']);
-    Route::get('/get_spot/{id}', [HomeController::class, 'getSpot']);
-    Route::get('/get_all/{id}', [HomeController::class, 'getAll']);
+    Route::get('/spot_data/{id}', [HomeController::class, 'spotData']);
+    Route::get('/home_data/{id}', [HomeController::class, 'homeData']);
 
     // 駐輪場
     Route::get('/edit_spot/{id}', [SpotController::class, 'editSpot']);

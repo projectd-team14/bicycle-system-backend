@@ -11,7 +11,7 @@ use App\Models\Camera;
 class HomeController extends Controller
 {
     //駐輪情報
-    public function getSpot($id){
+    public function spotData($id){
         $spots = Spot::where('spots_id', $id)->get();
         $bicycles = Bicycle::where('spots_id', $id)->get();
         $day1Str = explode(",",$spots[0]["spots_count_day1"]);
@@ -115,7 +115,7 @@ class HomeController extends Controller
     }
 
     //全情報
-    public function getAll($id){
+    public function homeData($id){
         $spots = Spot::where('users_id', $id)->get();
         $spotsDataAll = [];
         $spotsId = [];
