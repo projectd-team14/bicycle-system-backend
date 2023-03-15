@@ -1,18 +1,16 @@
+
 version: '3.9'
 services:
   php:
-    build: ./src/php
+    build: ./docker/php
     volumes:
-      - ./src/app:/var/www/html
-
+      - .:/var/www/html
   nginx:
-    image: nginx:latest
+    image: nginx:1.23.3
     ports:
       - 8000:80
-    environment:
-      - PORT=8000
     volumes:
-      - ./src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./src/app:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
     depends_on:
       - php

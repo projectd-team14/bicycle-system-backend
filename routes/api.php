@@ -33,21 +33,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [RegisterApiController::class, 'register']);
 Route::post('/login', [LoginApiController::class, 'login']);
 Route::post('/logout', [LoginApiController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function(){
+    // ダッシュボード、基本情報
+    Route::get('/congestions_spot/{id}', [SpotDashboardController::class, 'CongestionsSpot']);
+    Route::get('/get_spot/{id}', [MainController::class, 'getSpot']);
+    Route::get('/get_all/{id}', [MainController::class, 'getAll']);
 
-// ダッシュボード
-Route::get('/congestions_spot/{id}', [SpotDashboardController::class, 'CongestionsSpot']);
+    // 駐輪場
+    Route::get('/edit_spot/{id}', [SpotController::class, 'editSpot']);
+    Route::post('/store_spot/{id}', [SpotController::class, 'storeSpot']);
+    Route::post('/delete_spot/{id}', [SpotController::class, 'deleteSpot']);
 
-// カメラ
-Route::get('/edit_camera/{id}', [CameraController::class, 'editCamera']);
-Route::post('/store_camera/{id}', [CameraController::class, 'storeCamera']);
-Route::post('/delete_camera/{id}', [CameraController::class, 'deleteCamera']);
-Route::get('/start/{id}', [CameraController::class, 'start']);
-Route::get('/stop/{id}', [CameraController::class, 'stop']);
-
-// 駐輪場
-Route::get('/edit_spot/{id}', [SpotController::class, 'editSpot']);
-Route::post('/store_spot/{id}', [SpotController::class, 'storeSpot']);
-Route::post('/delete_spot/{id}', [SpotController::class, 'deleteSpot']);
+    // カメラ
+    Route::get('/edit_camera/{id}', [CameraController::class, 'editCamera']);
+    Route::post('/store_camera/{id}', [CameraController::class, 'storeCamera']);
+    Route::post('/delete_camera/{id}', [CameraController::class, 'deleteCamera']);
+    Route::get('/start/{id}', [CameraController::class, 'start']);
+    Route::get('/stop/{id}', [CameraController::class, 'stop']);
+});
 
 // ラベリングデータ
 Route::post('/labels/{id}', [LabelController::class, 'labels']);
@@ -56,10 +59,6 @@ Route::get('/check_labels/{id}', [LabelController::class, 'checkLabels']);
 
 // CSV
 Route::get('/csv/{id}', [CsvController::class, 'csv']);
-
-// その他
-Route::get('/get_spot/{id}', [MainController::class, 'getSpot']);
-Route::get('/get_all/{id}', [MainController::class, 'getAll']);
 
 // YOLOv5
 Route::get('/get_camera_all', [YoloController::class, 'getCameraAll']);
