@@ -41,6 +41,12 @@ class SpotDashboardController extends Controller
             $day1Str = explode(",",$spots[$i]["spots_count_day1"]);
             $day1Int = array_map('intval', $day1Str);
 
+            // グラフの色を指定
+            $r = rand(130, 255);
+            $g = rand(130, 255);
+            $b = rand(180, 255);
+            $borderColor = "rgba(". (string)$r . ", " . (string)$g . ", " . (string)$b . ", " . "1)";
+
             // 混雑度
             $count = 0;
 
@@ -55,7 +61,8 @@ class SpotDashboardController extends Controller
                 'spots_violations' => $violationInt,
                 'spots_count_day1' => $day1Int,
                 'spots_congestion' => 100 * $count / $spots[$i]['spots_max'],
-                'spots_over_time' => $spots[$i]['spots_over_time']
+                'spots_over_time' => $spots[$i]['spots_over_time'],
+                "border_color" => $borderColor
             ];
 
             array_push($dataAll, $data);
