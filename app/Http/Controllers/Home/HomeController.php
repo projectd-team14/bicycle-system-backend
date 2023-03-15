@@ -119,6 +119,14 @@ class HomeController extends Controller
         $spots = Spot::where('users_id', $id)->get();
         $spotsDataAll = [];
         $spotsId = [];
+        $monthLabelsData = [];
+
+        for ($i = 0; $i < 30; $i++) {
+            $objDateTime = date('Y-m-d', strtotime("-$i day"));
+            array_push($monthLabelsData, $objDateTime);
+        }
+
+        $monthLabelsData = array_reverse($monthLabelsData);
 
         for ($i = 0; $i < count($spots); $i++) {
             array_push($spotsId, $spots[$i]['spots_id']);
@@ -241,6 +249,7 @@ class HomeController extends Controller
                 'img'=> $spots[$j]['spots_img'],
                 'camera' => $cameraNew,
                 'situation' => $situation,
+                'month_labels' => $monthLabelsData
             ];
             array_push($spotsDataAll,$allData);
             unset($allData);
