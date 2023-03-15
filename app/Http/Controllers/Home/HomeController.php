@@ -232,7 +232,7 @@ class HomeController extends Controller
                 'address' => $spots[$j]['spots_address'],
                 'latitude' => $spots[$j]['spots_latitude'],
                 'longitude' => $spots[$j]['spots_longitude'],
-                'borderColor' => $borderColor,
+                'border_color' => $borderColor,
                 'max' => $spots[$j]['spots_max'],
                 'count' => end($day1Int),
                 'count_day1' => $day1Int,
