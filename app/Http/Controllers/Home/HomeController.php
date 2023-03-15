@@ -128,8 +128,15 @@ class HomeController extends Controller
         $bicycleAll = Bicycle::where('spots_id', $spotsId)->whereIn('bicycles_status', ['None', '違反'])->get();
 
         for ($j = 0; $j < count($spots); $j++){
-            $day1Str = explode(",", $spots[$j]["spots_count_day1"]);
+            $day1Str = explode(",",$spots[$j]["spots_count_day1"]);
             $day1Int = array_map('intval', $day1Str);
+            $violationStr = explode(",",$spots[$j]["spots_violations"]);
+            $violationInt = array_map('intval', $violationStr);
+            // グラフの色を指定
+            $r = rand(130, 255);
+            $g = rand(130, 255);
+            $b = rand(180, 255);
+            $borderColor = "rgba(". (string)$r . ", " . (string)$g . ", " . (string)$b . ", " . "1)";
 
             //cameraの項目
             $cameraNew = [];
@@ -225,12 +232,15 @@ class HomeController extends Controller
                 'address' => $spots[$j]['spots_address'],
                 'latitude' => $spots[$j]['spots_latitude'],
                 'longitude' => $spots[$j]['spots_longitude'],
+                'borderColor' => $borderColor,
                 'max' => $spots[$j]['spots_max'],
                 'count' => end($day1Int),
+                'count_day1' => $day1Int,
+                'count_violations'=> $violationInt,
                 'overtime' => $spots[$j]['spots_over_time'],
                 'img'=> $spots[$j]['spots_img'],
                 'camera' => $cameraNew,
-                'situation' => $situation
+                'situation' => $situation,
             ];
             array_push($spotsDataAll,$allData);
             unset($allData);
