@@ -4,8 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterApiController;
 use App\Http\Controllers\Auth\LoginApiController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MainController;
+use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Camera\CameraController;
 use App\Http\Controllers\Spot\SpotController;
 use App\Http\Controllers\Spot\SpotDashboardController;
@@ -36,8 +35,8 @@ Route::post('/logout', [LoginApiController::class, 'logout']);
 Route::middleware('auth:sanctum')->group(function(){
     // ダッシュボード、基本情報
     Route::get('/congestions_spot/{id}', [SpotDashboardController::class, 'CongestionsSpot']);
-    Route::get('/get_spot/{id}', [MainController::class, 'getSpot']);
-    Route::get('/get_all/{id}', [MainController::class, 'getAll']);
+    Route::get('/get_spot/{id}', [HomeController::class, 'getSpot']);
+    Route::get('/get_all/{id}', [HomeController::class, 'getAll']);
 
     // 駐輪場
     Route::get('/edit_spot/{id}', [SpotController::class, 'editSpot']);

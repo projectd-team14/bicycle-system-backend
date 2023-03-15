@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Home;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Spot;
 use App\Models\Bicycle;
 use App\Models\Camera;
 
-class MainController extends Controller
+class HomeController extends Controller
 {
     //駐輪情報
     public function getSpot($id){
