@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function(){
     // ダッシュボード、基本情報
     Route::get('/congestions_spot/{id}', [SpotDashboardController::class, 'CongestionsSpot']);
     Route::get('/spot_data/{id}', [HomeController::class, 'spotData']);
+    Route::get('/camera_data/{id}', [HomeController::class, 'cameraData']);
     Route::get('/home_data/{id}', [HomeController::class, 'homeData']);
 
     // 駐輪場

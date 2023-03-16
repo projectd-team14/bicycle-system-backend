@@ -114,8 +114,22 @@ class HomeController extends Controller
         );
     }
 
+    // カメラ情報
+    public function cameraData($id) {
+        $cameras  = Camera::where('spots_id', $id)->get([
+            'cameras_id',
+            'spots_id',
+            'cameras_name',
+            'cameras_url',
+            'cameras_status',
+            'cameras_count'
+        ]);
+
+        return $cameras;
+    }
+
     //全情報
-    public function homeData($id){
+    public function homeData($id) {
         $spots = Spot::where('users_id', $id)->get();
         $spotsDataAll = [];
         $spotsId = [];
