@@ -54,9 +54,12 @@ class CameraController extends Controller
 
     public function deleteCamera($id)
     {
-         Camera::where('cameras_id', $id)->delete();
+        $camera = Camera::where('cameras_id', $id)->delete(['spots_id']);
 
-        return "削除完了";
+        return response()->json([
+            'spots_id' => $camera,
+            'message' => '削除しました'
+        ]);
     }
 
     #スタートボタンidはcameras_id
@@ -66,7 +69,9 @@ class CameraController extends Controller
         $serverCondition = Bicycle::where('cameras_id', $id)->exists();
 
         if ($cameras[0]["cameras_status"] == "Run") {
-            return "処理中です";
+            return response()->json([
+                'message' => '処理中です'
+            ]);
         } else {
            Camera::where('cameras_id', $id)->update(['cameras_status'=>'Run']);
            //PythonAPI
@@ -90,7 +95,9 @@ class CameraController extends Controller
                 curl_close($conn);
            }
 
-           return "処理を開始します";
+           return response()->json([
+                'message' => '処理を開始します'
+            ]);
         }
     }
 
@@ -98,11 +105,15 @@ class CameraController extends Controller
     {
         $cameras = Camera::where('cameras_id', $id)->get();
         if ($cameras[0]["cameras_status"]=="Run"){
-           Camera::where('cameras_id', $id)->update(['cameras_status'=>'Stop']); 
+            Camera::where('cameras_id', $id)->update(['cameras_status'=>'Stop']); 
 
-           return '処理を停止します';
+           return response()->json([
+                'message' => '処理を停止します'
+            ]);
         } else {
-            return '処理が開始されていません';
+            return response()->json([
+                'message' => '処理が開始されていません'
+            ]);
         }
     }
 
