@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function(){
     // カメラ
     Route::get('/edit_camera/{id}', [CameraController::class, 'editCamera']);
     Route::post('/store_camera/{id}', [CameraController::class, 'storeCamera']);
-    Route::post('/delete_camera/{id}', [CameraController::class, 'deleteCamera']);
+    Route::get('/delete_camera/{id}', [CameraController::class, 'deleteCamera']);
     Route::get('/start/{id}', [CameraController::class, 'start']);
     Route::get('/stop/{id}', [CameraController::class, 'stop']);
 });

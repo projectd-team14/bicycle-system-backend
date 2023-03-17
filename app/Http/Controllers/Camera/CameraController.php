@@ -52,9 +52,8 @@ class CameraController extends Controller
         return $data;
     }
 
-    public function deleteCamera(Request $request, $id)
+    public function deleteCamera($id)
     {
-        $inputs = $request->all();
          Camera::where('cameras_id', $id)->delete();
 
         return "削除完了";
