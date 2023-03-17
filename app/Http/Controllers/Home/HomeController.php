@@ -26,30 +26,59 @@ class HomeController extends Controller
         $month3Str = explode(",",$spots[0]["spots_count_month3"]);
         $month3Int = array_map('intval', $month3Str);
         $month3Count = count($month3Int);
+
         $dataDay1 = [
             "label" => "1日間",
             "backgroundColor" => "#f87979",
             "data" => $day1Int,
-            "labels" => range(1, $day1Count)
+            "labels" => range(0, 23)
         ];
+
+        $weekLabelsData = [];
+        
+        for ($i = 0; $i < 7; $i++) {
+            $objDateTime = date('Y-m-d', strtotime("-$i day"));
+            array_push($weekLabelsData, $objDateTime);
+        }
+
+        $weekLabelsData = array_reverse($weekLabelsData);
         $dataWeek1 = [
             "label" => "1週間",
             "backgroundColor" => "#f87979",
             "data" => $week1Int,
-            "labels" => range(1, $week1Count)
+            "labels" => $weekLabelsData
         ];
+
+        $oneMonthLabelsData = [];
+
+        for ($i = 0; $i < 30; $i++) {
+            $objDateTime = date('Y-m-d', strtotime("-$i day"));
+            array_push($oneMonthLabelsData, $objDateTime);
+        }
+
+        $oneMonthLabelsData = array_reverse($oneMonthLabelsData);
         $dataMonth1 = [
             "label" => "1か月間",
             "backgroundColor" => "#f87979",
             "data" => $month1Int,
-            "labels" => range(1, $month1Count)
+            "labels" => $oneMonthLabelsData
         ];
+
+        $threeMonthLabelsData = [];
+
+        for ($i = 0; $i < 30; $i++) {
+            $objDateTime = date('Y-m-d', strtotime("-$i day"));
+            array_push($threeMonthLabelsData, $objDateTime);
+        }
+
+        $threeMonthLabelsData = array_reverse($threeMonthLabelsData);
         $dataMonth3 = [
             "label" => "３か月間",
             "backgroundColor" => "#f87979",
             "data" => $month3Int,
-            "labels" => range(1, $month3Count)
+            "labels" => $threeMonthLabelsData
         ];
+
         $dataAll1 = [
             $dataDay1,
             $dataWeek1,
