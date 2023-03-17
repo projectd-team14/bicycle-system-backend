@@ -80,7 +80,9 @@ class SpotController extends Controller
         Spot::where('spots_id', $id)->delete();
         Camera::where('spots_id', $id)->delete();
 
-        return "削除完了";
+        return response()->json([
+            'message' => '削除しました'
+        ]);
     }
 
     private function htmlValidation($data)

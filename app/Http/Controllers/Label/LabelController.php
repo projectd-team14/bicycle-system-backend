@@ -16,7 +16,9 @@ class LabelController extends Controller
 
         // XSS対策（攻撃そのものの対策ではなく、HTMLタグをDBやレスポンスに含めないようにする）
         if ($this->htmlValidation($data)) {
-            return '使用できない文字が含まれています';
+            return response()->json([
+                'message' => '使用できない文字が含まれています'
+            ]);
         }
 
         $dataStr = json_encode($data);
@@ -47,14 +49,18 @@ class LabelController extends Controller
             curl_close($conn);            
             */
             
-            return  "ラベルを更新しました。";
+            return response()->json([
+                'message' => 'ラベルを更新しました'
+            ]);
         } else {
             $labelData = Label::insertGetId([
                 'cameras_id' => $id,
                 'labels_json' => $dataStr,
             ]);
     
-            return  "ラベルを更新しました。";
+            return response()->json([
+                'message' => 'ラベルを登録しました'
+            ]);
         }
     }
 
