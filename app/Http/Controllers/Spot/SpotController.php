@@ -21,18 +21,9 @@ class SpotController extends Controller
     {
         $data = $request->all();
         $query = $data['spots_address'];
-        $query = urlencode($query);
-        $url = "http://www.geocoding.jp/api/";
-        $url.= "?v=1.1&q=".$query;
-        $line="";
-        $fp = fopen($url, "r");
-
-        while(!feof($fp)) {
-            $line.= fgets($fp);
-        }
-
-        fclose($fp);
-        $xml = simplexml_load_string($line);
+        
+        // 外部のAPIから位置情報を取得
+        $xml = $this->getCoordinate($query);
         $insertLong = (string) $xml->coordinate->lng;
         $insertLat= (string) $xml->coordinate->lat;
 
@@ -96,6 +87,24 @@ class SpotController extends Controller
         }
 
         return false;
+    }
+
+    private function getCoordinate($query)
+    {
+        $query = urlencode($query);
+        $url = "http://www.geocoding.jp/api/";
+        $url.= "?v=1.1&q=" . $query;
+        $line="";
+        $fp = fopen($url, "r");
+
+        while(!feof($fp)) {
+            $line.= fgets($fp);
+        }
+
+        fclose($fp);
+        $xml = simplexml_load_string($line);
+
+        return $xml;
     }
 
     private function createSpotLog($data)
