@@ -8,6 +8,7 @@ use App\Models\Spot;
 use App\Models\Bicycle;
 use App\Jobs\CreateSpotJob;
 use App\Jobs\DeleteSpotJob;
+use Illuminate\Support\Facades\Log;
 
 class SpotController extends Controller
 {
@@ -23,7 +24,7 @@ class SpotController extends Controller
         $query = $data['spots_address'];
         
         // 外部のAPIから位置情報を取得
-        $xml = $this->getCoordinate($query);
+        $coordinateData= $this->getCoordinate($query);
 
         $spotStatus = 0;
 
@@ -89,27 +90,45 @@ class SpotController extends Controller
 
     private function getCoordinate($query)
     {
-        $query = urlencode($query);
-        $url = "http://www.geocoding.jp/api/";
-        $url .= "?v=1.1&q=" . $query;
-        $line = "";
-        $fp = fopen($url, "r");
+        for ($i =0; $i <= 5; $i++) {
+            try {
+                $query = urlencode($query);
+                $url = "http://www.geocoding.jp/api/";
+                $url .= "?v=1.1&q=" . $query;
+                $line = "";
+                $fp = fopen($url, "r");
+        
+                while(!feof($fp)) {
+                    $line .= fgets($fp);
+                }
+        
+                fclose($fp);
+                $xml = simplexml_load_string($line);
+                $insertLong = (string) $xml->coordinate->lng;
+                $insertLat = (string) $xml->coordinate->lat;
 
-        while(!feof($fp)) {
-            $line .= fgets($fp);
+                if (!is_null($insertLong) || !is_null($insertlat)) {
+                    Log::info("座標の取得処理の処理が成功しました。");
+                    $coordinateData = [
+                        'spots_longitude' => $insertLong, 
+                        'spots_latitude' => $insertLat,
+                    ];
+            
+                    return $coordinateData;                
+                }
+
+                Log::info("座標の取得処理が正常に終了しなかったためリトライします。");
+                throw new \Exception();
+            } catch (\Exception $e) {
+                Log::info("座標の取得処理が正常に終了しなかったためリトライします。");
+                
+                if ($i >= 5) {
+                    Log::error("座標の取得処理でエラーが発生したため強制終了しました。");
+
+                    return;
+                }
+            }            
         }
-
-        fclose($fp);
-        $xml = simplexml_load_string($line);
-        $insertLong = (string) $xml->coordinate->lng;
-        $insertLat= (string) $xml->coordinate->lat;
-
-        $coordinateData = [
-            'spots_longitude' => $insertLong, 
-            'spots_latitude' => $insertLat,
-        ];
-
-        return $coordinateData;
     }
 
     private function createSpotLog($data)
