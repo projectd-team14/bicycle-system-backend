@@ -24,8 +24,6 @@ class SpotController extends Controller
         
         // 外部のAPIから位置情報を取得
         $xml = $this->getCoordinate($query);
-        $insertLong = (string) $xml->coordinate->lng;
-        $insertLat= (string) $xml->coordinate->lat;
 
         $spotStatus = 0;
 
@@ -45,8 +43,8 @@ class SpotController extends Controller
         $spotId = Spot::insertGetId([
              'spots_name' => $data['spots_name'],
              'users_id' => $id, 
-             'spots_longitude' => $insertLong, 
-             'spots_latitude' => $insertLat,
+             'spots_longitude' => $coordinateData['spots_longitude'], 
+             'spots_latitude' => $coordinateData['spots_latitude'],
              'spots_address' => $data['spots_address'],
              'spots_status' => $spotStatus,
              'spots_count_day1' => 'None',
@@ -93,18 +91,25 @@ class SpotController extends Controller
     {
         $query = urlencode($query);
         $url = "http://www.geocoding.jp/api/";
-        $url.= "?v=1.1&q=" . $query;
-        $line="";
+        $url .= "?v=1.1&q=" . $query;
+        $line = "";
         $fp = fopen($url, "r");
 
         while(!feof($fp)) {
-            $line.= fgets($fp);
+            $line .= fgets($fp);
         }
 
         fclose($fp);
         $xml = simplexml_load_string($line);
+        $insertLong = (string) $xml->coordinate->lng;
+        $insertLat= (string) $xml->coordinate->lat;
 
-        return $xml;
+        $coordinateData = [
+            'spots_longitude' => $insertLong, 
+            'spots_latitude' => $insertLat,
+        ];
+
+        return $coordinateData;
     }
 
     private function createSpotLog($data)
