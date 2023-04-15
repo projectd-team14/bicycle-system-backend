@@ -289,7 +289,7 @@ class HomeController extends Controller
                 'count_day1' => $day1Int,
                 'count_violations'=> $violationInt,
                 'overtime' => $spots[$j]['spots_over_time'],
-                'img'=> $spots[$j]['spots_img'],
+                'url'=> $spots[$j]['spots_url'],
                 'camera' => $cameraNew,
                 'situation' => $situation,
                 'month_labels' => $monthLabelsData
