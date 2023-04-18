@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Spot;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Spot;
+use App\Models\Camera;
 use App\Models\Bicycle;
 use App\Jobs\CreateSpotJob;
 use App\Jobs\DeleteSpotJob;
@@ -63,7 +64,7 @@ class SpotController extends Controller
         return $data;
     }
 
-    public function deleteSpot(Request $request, $id)
+    public function deleteSpot($id)
     {
         $deleteSpotName = Spot::where('spots_id', $id)->get(['spots_name']);
         $this->deleteSpotLog($deleteSpotName);

@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function(){
     // 駐輪場
     Route::get('/edit_spot/{id}', [SpotController::class, 'editSpot']);
     Route::post('/store_spot/{id}', [SpotController::class, 'storeSpot']);
-    Route::post('/delete_spot/{id}', [SpotController::class, 'deleteSpot']);
+    Route::get('/delete_spot/{id}', [SpotController::class, 'deleteSpot']);
 
     // カメラ
     Route::get('/edit_camera/{id}', [CameraController::class, 'editCamera']);
