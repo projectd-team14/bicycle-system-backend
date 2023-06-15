@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Csv;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Bicycle;
 
 class CsvController extends Controller
@@ -23,6 +24,7 @@ class CsvController extends Controller
             $csv .= '"' . $value['bicycles_id'] . '","' . $value['bicycles_status'] . '","' . $value['created_at'] . '","' . $value['updated_at'] . '"' . "\n";
         }
         $csvValue = mb_convert_encoding($csv, "SJIS", "UTF-8");
-        return $csvValue;
+        
+        return  response()->json($csvValue, Response::HTTP_OK);
     }
 }

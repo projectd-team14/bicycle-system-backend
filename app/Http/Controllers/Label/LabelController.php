@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Label;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Label;
 use App\Models\Camera;
 
@@ -16,9 +17,7 @@ class LabelController extends Controller
 
         // XSS対策（攻撃そのものの対策ではなく、HTMLタグをDBやレスポンスに含めないようにする）
         if ($this->htmlValidation($data)) {
-            return response()->json([
-                'message' => '使用できない文字が含まれています'
-            ]);
+            return response()->json(['message' => '使用できない文字が含まれています'], Response::HTTP_OK);
         }
 
         $dataStr = json_encode($data);
@@ -35,7 +34,7 @@ class LabelController extends Controller
               'Accept-Charset: UTF-8',
             ];
 
-            $labelData = Label::where('cameras_id', $id)->update(['cameras_id' => $id, 'labels_json' => $dataStr]);
+            Label::where('cameras_id', $id)->update(['cameras_id' => $id, 'labels_json' => $dataStr]);
     
             /*
             $url = "${ipAddress}/create_labels_image/?id=${id}";
@@ -49,18 +48,14 @@ class LabelController extends Controller
             curl_close($conn);            
             */
             
-            return response()->json([
-                'message' => 'ラベルを更新しました'
-            ]);
+            return response()->json(['message' => 'ラベルを更新しました'], Response::HTTP_OK);
         } else {
-            $labelData = Label::insertGetId([
+            Label::insertGetId([
                 'cameras_id' => $id,
                 'labels_json' => $dataStr,
             ]);
     
-            return response()->json([
-                'message' => 'ラベルを登録しました'
-            ]);
+            return response()->json(['message' => 'ラベルを登録しました'], Response::HTTP_OK);
         }
     }
 
@@ -88,7 +83,7 @@ class LabelController extends Controller
             }
         }
 
-        return $labelData;
+        return response()->json($labelData, Response::HTTP_OK);
     }
 
     private function htmlValidation($data)

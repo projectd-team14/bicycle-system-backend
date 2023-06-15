@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Camera;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Camera;
 use App\Models\Bicycle;
 use App\Jobs\CreateCameraJob;
@@ -26,7 +27,7 @@ class CameraController extends Controller
     public function editCamera($id){
         $cameras = Camera::where('spots_id', $id)->get();
 
-        return $cameras;
+        return response()->json($cameras, Response::HTTP_OK);
     }
 
     //カメラを登録,idはspots_id
@@ -49,7 +50,7 @@ class CameraController extends Controller
         
         $this->createCameraLog($data);
 
-        return $data;
+        return response()->json($data, Response::HTTP_OK);
     }
 
     public function deleteCamera($id)
@@ -59,7 +60,7 @@ class CameraController extends Controller
         return response()->json([
             'spots_id' => $camera,
             'message' => '削除しました'
-        ]);
+        ], Response::HTTP_OK);
     }
 
     #スタートボタンidはcameras_id
@@ -95,9 +96,7 @@ class CameraController extends Controller
                 curl_close($conn);
            }
 
-           return response()->json([
-                'message' => '処理を開始します'
-            ]);
+           return response()->json(['message' => '処理を開始します'], Response::HTTP_OK);
         }
     }
 
@@ -107,13 +106,9 @@ class CameraController extends Controller
         if ($cameras[0]["cameras_status"]=="Run"){
             Camera::where('cameras_id', $id)->update(['cameras_status'=>'Stop']); 
 
-           return response()->json([
-                'message' => '処理を停止します'
-            ]);
+           return response()->json(['message' => '処理を停止します'], Response::HTTP_OK);
         } else {
-            return response()->json([
-                'message' => '処理が開始されていません'
-            ]);
+            return response()->json(['message' => '処理が開始されていません'], Response::HTTP_OK);
         }
     }
 

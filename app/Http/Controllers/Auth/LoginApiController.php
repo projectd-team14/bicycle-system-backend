@@ -36,6 +36,6 @@ class LoginApiController extends Controller
 
     public function user(Request $request){
         $user = $request->user();
-        return response()->json(compact('user'), 200);
+        return response()->json(compact('user'), Response::HTTP_OK);
     }
 }

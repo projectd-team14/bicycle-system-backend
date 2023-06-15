@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Spot;
 use App\Models\Bicycle;
 use App\Models\Camera;
@@ -135,12 +136,10 @@ class HomeController extends Controller
             $dataMonth3
         ];
 
-        return response()->json(
-            [
-                'situationChartData' => $dataAll1,
-                "numberChartData" => $dataAll2
-            ]
-        );
+        return response()->json([
+            'situationChartData' => $dataAll1,
+            "numberChartData" => $dataAll2
+        ], Response::HTTP_OK);
     }
 
     // カメラ情報
@@ -154,7 +153,7 @@ class HomeController extends Controller
             'cameras_count'
         ]);
 
-        return $cameras;
+        return response()->json($cameras, Response::HTTP_OK);
     }
 
     //全情報
@@ -300,6 +299,6 @@ class HomeController extends Controller
             unset($cameraNew);
         }
 
-        return $spotsDataAll;
+        return response()->json($spotsDataAll, Response::HTTP_OK);
     }
 }

@@ -44,7 +44,7 @@ class RegisterApiController extends Controller
 
         $this->createUserLog($request);
 
-        return response()->json( $json, Response::HTTP_OK);
+        return response()->json($json, Response::HTTP_OK);
     }
 
     private function htmlValidation($data)

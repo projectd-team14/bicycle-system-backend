@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Spot;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Spot;
 use App\Models\Camera;
 
@@ -16,16 +17,14 @@ class SpotDashboardController extends Controller
         $spotsId = [];
 
         if (count($spots) === 0) {
-            $dataAll = [
+            return response()->json([
                 [
                     "spots_name" => "駐輪場がありません",
                     "spots_violations" => [],
                     "spots_count_day1" => [],
                     "spots_congestion" => 0
                 ]
-            ];
-
-            return $dataAll;
+            ], Response::HTTP_OK);
         }
 
         for ($i = 0; $i < count($spots); $i++) {
@@ -68,6 +67,6 @@ class SpotDashboardController extends Controller
             array_push($dataAll, $data);
         }
 
-        return $dataAll;
+        return response()->json($data, Response::HTTP_OK);
     }   
 }

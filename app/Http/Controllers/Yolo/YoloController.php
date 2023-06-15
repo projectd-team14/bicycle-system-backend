@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Yolo;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Camera;
 use App\Models\Spot;
 use App\Models\Label;
@@ -18,35 +19,35 @@ class YoloController extends Controller
     {
         $cameraAll = Camera::get(['spots_id', 'cameras_count']);
 
-        return $cameraAll;
+        return response()->json($cameraAll, Response::HTTP_OK);
     }
 
     public function getCameraStatus($id)
     {
         $cameraStatus = Camera::where('cameras_id', $id)->get('cameras_status');
         
-        return $cameraStatus;
+        return response()->json($cameraStatus, Response::HTTP_OK);
     }
 
     public function getCameraStop($id)
     {
         Bicycle::where('cameras_id', $id)->delete();
         
-        return "終了";
+        return response()->json("終了", Response::HTTP_OK);
     }
 
     public function getCameraCount($id, $count)
     {
         Camera::where('cameras_id', $id)->update(['cameras_count' => $count]);
         
-        return $count;
+        return response()->json($count, Response::HTTP_OK);
     }
 
     public function getUrl($id)
     {
         $cameraUrl = Camera::where('cameras_id', $id)->get('cameras_url');
         
-        return $cameraUrl;
+        return response()->json($cameraUrl, Response::HTTP_OK);
     }
 
     public function overTime($id)
@@ -54,14 +55,14 @@ class YoloController extends Controller
         $spotId = Camera::where('cameras_id', $id)->get('spots_id');
         $overTime = Spot::where('spots_id', $spotId[0]["spots_id"])->get(['spots_id', 'spots_over_time', 'spots_status']);
 
-        return $overTime;
+        return response()->json($overTime, Response::HTTP_OK);
     }
 
     public function getLabel($id)
     {
         $labelJson = Label::where('cameras_id', $id)->get('labels_json');
 
-        return $labelJson;
+        return response()->json($labelJson, Response::HTTP_OK);
     }
 
     public function getId($id)
@@ -72,7 +73,7 @@ class YoloController extends Controller
             array_push($idList,$labelJson[$i]['get_id']); 
         }
 
-        return $idList;
+        return response()->json($idList, Response::HTTP_OK);
     }
 
     public function bicycleStatus($camera_id, $get_id)
@@ -80,19 +81,18 @@ class YoloController extends Controller
         $bicycleStatus = Bicycle::where('cameras_id', $camera_id)->where('get_id', $get_id)->get(['bicycles_id', 'bicycles_status', 'updated_at', 'created_at']);
         $bicycleList = [$bicycleStatus[0]['bicycles_id'], $bicycleStatus[0]['bicycles_status'], $bicycleStatus[0]['updated_at'], $bicycleStatus[0]['created_at']];
 
-        return $bicycleList;
+        return response()->json($bicycleList, Response::HTTP_OK);
     }
 
     public function bicycleUpdate(Request $request)
     {
         $inputs = $request->all();
         $data = $this->dispatch(new YoloUpdateJob($inputs));
-
         $job = new YoloUpdateJob($inputs);
         $this->dispatchSync($job);
         $result = $job->getResult(); 
 
-       return $result;
+        return response()->json($result, Response::HTTP_OK);
     }
 
     public function bicycleDelete(Request $request, $camera_id)
@@ -103,7 +103,7 @@ class YoloController extends Controller
         $this->dispatchSync($job);
         $result = $job->getResult();
         
-        return $result;
+        return response()->json($result, Response::HTTP_OK);
     }
 
     public function bicycleViolation(Request $request)
@@ -114,7 +114,7 @@ class YoloController extends Controller
         $this->dispatchSync($job);
         $result = $job->getResult();
         
-        return $result;
+        return response()->json($result, Response::HTTP_OK);
     }
 
 
@@ -122,7 +122,7 @@ class YoloController extends Controller
     {
         $spotDay1 = Spot::where('spots_id', $id)->get('spots_count_day1');
 
-        return $spotDay1;
+        return response()->json($spotDay1, Response::HTTP_OK);
     }
 
     public function getSpotDay1Update(Request $request, $id)
@@ -130,14 +130,14 @@ class YoloController extends Controller
         $inputs = $request->all();
         $spotDay1Update = Spot::where('spots_id', $id)->update(['spots_count_day1' => $inputs['spots_count_day1']]);
 
-        return $spotDay1Update;
+        return response()->json($spotDay1Update, Response::HTTP_OK);
     }
 
     public function getSpotWeek1($id)
     {
         $spotWeek1 = Spot::where('spots_id', $id)->get('spots_count_week1');
 
-        return $spotWeek1;
+        return response()->json($spotWeek1, Response::HTTP_OK);
     }
 
     public function getSpotWeek1Update(Request $request, $id)
@@ -145,14 +145,14 @@ class YoloController extends Controller
         $inputs = $request->all();
         $spotWeek1Update = Spot::where('spots_id', $id)->update(['spots_count_week1' => $inputs['spots_count_week1']]);
 
-        return $spotWeek1Update;
+        return response()->json($spotWeek1Update, Response::HTTP_OK);
     }
 
     public function getSpotMonth1($id)
     {
         $spotMonth1 = Spot::where('spots_id', $id)->get('spots_count_month1');
 
-        return $spotMonth1;
+        return response()->json($spotMonth1, Response::HTTP_OK);
     }
 
     public function getSpotMonth1Update(Request $request, $id)
@@ -160,14 +160,14 @@ class YoloController extends Controller
         $inputs = $request->all();
         $spotMonth1Update = Spot::where('spots_id', $id)->update(['spots_count_month1' => $inputs['spots_count_month1']]);
 
-        return $spotMonth1Update;
+        return response()->json($spotMonth1Update, Response::HTTP_OK);
     }
 
     public function getSpotMonth3($id)
     {
         $spotMonth1 = Spot::where('spots_id', $id)->get('spots_count_month3');
 
-        return $spotMonth1;
+        return response()->json($spotMonth1, Response::HTTP_OK);
     }
 
     public function getSpotMonth3Update(Request $request, $id)
@@ -175,7 +175,7 @@ class YoloController extends Controller
         $inputs = $request->all();
         $spotMonth3Update = Spot::where('spots_id', $id)->update(['spots_count_month3' => $inputs['spots_count_month3']]);
 
-        return $spotMonth3Update;
+        return response()->json($spotMonth3Update, Response::HTTP_OK);
     }
 
     public function serverCondition($id)
@@ -183,9 +183,9 @@ class YoloController extends Controller
         $serverCondition = Bicycle::where('cameras_id', $id)->exists();
 
         if ($serverCondition) {
-            return ['condition' =>'false'];
+            return response()->json(['condition' =>'false'], Response::HTTP_OK);
         } else {
-            return ['condition' =>'true'];
+            return response()->json(['condition' =>'true'], Response::HTTP_OK);
         }
     }
 
@@ -215,6 +215,6 @@ class YoloController extends Controller
             }
         }
 
-        return $inputs;
+        return response()->json($inputs, Response::HTTP_OK);
     }
 }

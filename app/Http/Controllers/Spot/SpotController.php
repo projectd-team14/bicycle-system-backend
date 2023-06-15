@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Spot;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\Spot;
 use App\Models\Camera;
 use App\Models\Bicycle;
@@ -16,7 +17,7 @@ class SpotController extends Controller
     public function editSpot($id){
         $cameras = Spot::where('users_id', $id)->get();
 
-        return $cameras;
+        return response()->json($cameras, Response::HTTP_OK);
     }
 
     public function storeSpot(Request $request, $id)
@@ -39,7 +40,7 @@ class SpotController extends Controller
 
         // XSS対策（攻撃そのものの対策ではなく、HTMLタグをDBやレスポンスに含めないようにする）
         if ($this->htmlValidation($data)) {
-            return '使用できない文字が含まれています';
+            return response()->json('使用できない文字が含まれています', Response::HTTP_OK);
         }
 
         $spotId = Spot::insertGetId([
@@ -61,7 +62,7 @@ class SpotController extends Controller
 
         $this->createSpotLog($data);
 
-        return $data;
+        return response()->json($data, Response::HTTP_OK);
     }
 
     public function deleteSpot($id)
@@ -71,9 +72,7 @@ class SpotController extends Controller
         Spot::where('spots_id', $id)->delete();
         Camera::where('spots_id', $id)->delete();
 
-        return response()->json([
-            'message' => '削除しました'
-        ]);
+        return response()->json(['message' => '削除しました'], Response::HTTP_OK);
     }
 
     private function htmlValidation($data)
